@@ -56,7 +56,7 @@ go
 
 --VIAJES INTERNACIONALES
 CREATE TABLE ViajeInternacional(
-NViaje int foreign key references Viaje (NViaje) not null,
+NViaje int primary key foreign key references Viaje (NViaje) not null,
 ServicioABordo bit not null default 0,
 Documentacion varchar(100)not null
 );
@@ -64,7 +64,7 @@ go
 
 --VIAJES NACIONALES
 CREATE TABLE ViajeNacional(
-NViaje int foreign key references Viaje (NViaje) not null,
+NViaje int primary key foreign key references Viaje (NViaje) not null,
 CantParadas int not null check(CantParadas >= 0) default 0
 );
 go
@@ -163,6 +163,14 @@ AS BEGIN
 END
 GO
 
+--BUSQUEDA
+CREATE PROC BuscarEmpleado
+@Cedula int
+AS BEGIN
+	select * from Empleado where Cedula=@Cedula
+END
+GO
+
 -----------------------------------------------------SP TERMINAL------------------------------------------------------------------------------------
 --ALTLA
 CREATE PROC AltaTerminal
@@ -213,25 +221,33 @@ AS BEGIN
 		--si no tiene relacion
 		else
 		begin
-			begin try
-				begin transaction
-					delete Facilidades where Codigo=@Codigo
-					delete Terminal where Codigo=@Codigo
-					return 1
-				commit transaction
-			end try
-			
-			begin catch
-				rollback transaction
-				return -1
-			end catch
+			begin transaction
+				--eliminar facilidades
+				delete Facilidades where Codigo=@Codigo
+				--verificar error
+				if(@@ERROR!=0)
+				begin
+					rollback transaction
+					return -1
+				end
+				
+				--eliminar terminal
+				delete Terminal where Codigo=@Codigo
+				--verificar error			
+				if(@@ERROR!=0)
+				begin
+					rollback transaction
+					return -1
+				end
+				return 1
+			commit transaction
 		end
 	end
 	
 	--si no existe
 	else
 	begin
-		return -1
+		return -2
 	end
 END
 GO
@@ -257,6 +273,14 @@ AS BEGIN
 END
 GO
 
+--BUSQUEDA
+CREATE PROC BuscarTerminal
+@Codigo varchar(3)
+AS BEGIN
+	select * from Terminal where Codigo=@Codigo
+END
+GO
+
 -----------------------------------------------------SP FACILIDADES------------------------------------------------------------------------------------
 --ALTA
 CREATE PROC AltaFacilidad
@@ -266,8 +290,18 @@ AS BEGIN
 	--si existe terminal
 	if exists(select Codigo from Terminal where Codigo=@Codigo and Estado=1)
 	begin
-		insert Facilidades values(@Codigo,@Facilidad)
-		return 1
+		--si no existe esta facilidad en esta terminal
+		if not exists(select Codigo from Facilidades where Codigo=@Codigo and Facilidad=@Facilidad)
+		begin
+			insert Facilidades values(@Codigo,@Facilidad)
+			return 1
+		end
+		
+		--la facilidad ya existe
+		else
+		begin
+			return -2
+		end
 	end
 	
 	--de lo contrario
@@ -363,19 +397,29 @@ AS BEGIN
 END
 GO
 
------------------------------------------------------SP VIAJE------------------------------------------------------------------------------------
+--BUSQUEDA
+CREATE PROC BuscarCompania
+@Nombre varchar(20)
+AS BEGIN
+	select * from Compania where Nombre=@Nombre
+END
+GO
+
+-----------------------------------------------------SP VIAJES INTERNACIONALES------------------------------------------------------------------------------------
 --Alta
-CREATE PROC AltaViaje
+CREATE PROC AltaViajeInternacional
 @NViaje int,
 @NCompania varchar(20),
 @Destino varchar(3),
 @EmpleadoMOG int,
 @FPartida datetime,
 @FDestino datetime,
-@CantAsientos int
+@CantAsientos int,
+@ServicioABordo bit,
+@Documentacion varchar(100)
 AS BEGIN
-	--si no existe viaje
-	if  not exists(select NViaje from Viaje where NViaje=@NViaje)
+	--si no existe viaje internacional
+	if not exists(select NViaje from ViajeInternacional where NViaje=@NViaje)
 	begin
 		--si existe compania
 		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
@@ -386,8 +430,26 @@ AS BEGIN
 				--si existe empleado
 				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
 				begin 
-					insert into Viaje values(@NViaje,@NCompania,@Destino,@EmpleadoMOG,@FPartida,@FDestino,@CantAsientos)
-					return 1
+					begin transaction
+						--insertar viaje
+						insert into Viaje values(@NViaje,@NCompania,@Destino,@EmpleadoMOG,@FPartida,@FDestino,@CantAsientos)
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -5
+						end
+						
+						--insertar viaje internacional
+						insert into ViajeInternacional values(@NViaje,@ServicioABordo,@Documentacion)
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -5
+						end
+						return 1
+					commit transaction
 				end
 				
 				--si no existe empleado
@@ -411,45 +473,65 @@ AS BEGIN
 		end
 	end
 	
-	--si existe viaje
+	--si existe viaje internacional
 	else 
 	begin
 		return -4
-	end
+	end	
 END
 GO
 
 --BAJA
-CREATE PROC BajaViaje
+CREATE PROC BajaViajeInternacional
 @NViaje int
 AS BEGIN
-	--si existe viaje
-	if exists(select NViaje from Viaje where NViaje=@NViaje)
+	--verificar si existe viaje internacional
+	if exists(select NViaje from ViajeInternacional where NViaje=@NViaje)
 	begin
-		delete Viaje where NViaje=@NViaje
-		return 1
+		begin transaction
+			--eliminar viaje internacional
+			delete ViajeInternacional where NViaje=@NViaje
+			--verificar error
+			if(@@ERROR!=0)
+			begin
+				rollback transaction
+				return -3
+			end
+				
+			--eliminar viaje
+			delete Viaje where NViaje=@NViaje
+			--verificar error
+			if(@@ERROR!=0)
+			begin
+				rollback transaction
+				return -3
+			end
+			return 1
+		commit transaction
 	end
 	
-	--si no existe
-	else
+	--si no existe viaje internacional
+	else 
 	begin
-		return -1
+		return -2
 	end
 END
 GO
 
 --MODIFICAR
-CREATE PROC ModificarViaje
+CREATE PROC ModificarViajeInternacional
 @NViaje int,
 @NCompania varchar(20),
 @Destino varchar(3),
 @EmpleadoMOG int,
 @FPartida datetime,
 @FDestino datetime,
-@CantAsientos int
+@CantAsientos int,
+@ServicioABordo bit,
+@Documentacion varchar(100)
 AS BEGIN
-		--si existe viaje
-	if exists(select NViaje from Viaje where NViaje=@NViaje)
+	--si existe viaje nacional
+	if exists(select NViaje from ViajeInternacional where NViaje=@NViaje)
 	begin
 		--si existe compania
 		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
@@ -460,10 +542,113 @@ AS BEGIN
 				--si existe empleado
 				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
 				begin 
-					update Viaje set NCompania=@NCompania,Destino=@Destino,EmpleadoMOG=@EmpleadoMOG,FPartida=@FPartida,FDestino=@FDestino,CantAsientos=@CantAsientos where NViaje=@NViaje
-					return 1
+					begin transaction
+						--actualizar viaje
+						update Viaje set NCompania=@NCompania,Destino=@Destino,EmpleadoMOG=@EmpleadoMOG,FPartida=@FPartida,FDestino=@FDestino,CantAsientos=@CantAsientos where NViaje=@NViaje
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -6
+						end
+						
+						--actualizar viaje internacional
+						update ViajeInternacional set ServicioABordo=@ServicioABordo,Documentacion=@Documentacion where NViaje=@NViaje
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -6
+						end
+						
+						return 1
+					commit transaction	
 				end
+					
+				--si no existe empleado
+				else
+				begin
+					return -1
+				end
+			end
 				
+			--si no existe terminal
+			else
+			begin
+				return -2
+			end
+		end
+			
+		--si no existe compania
+		else
+		begin
+			return -3
+		end
+	end
+		
+	--si no existe viaje internacional
+	else
+	begin
+		return -4
+	end
+END
+GO
+
+--BUSQUEDA
+CREATE PROC BuscarViajeInternacional
+@NViaje int
+AS BEGIN
+	select * from ViajeInternacional join Viaje on ViajeInternacional.NViaje=Viaje.NViaje where ViajeInternacional.NViaje=@NViaje and Viaje.FPartida>CURRENT_TIMESTAMP
+END
+GO
+
+-----------------------------------------------------SP VIAJES NACIONALES------------------------------------------------------------------------------------
+
+--Alta
+CREATE PROC AltaViajeNacional
+@NViaje int,
+@NCompania varchar(20),
+@Destino varchar(3),
+@EmpleadoMOG int,
+@FPartida datetime,
+@FDestino datetime,
+@CantAsientos int,
+@CantParadas int
+AS BEGIN
+	--si no existe viaje nacional
+	if not exists(select NViaje from ViajeNacional where NViaje=@NViaje)
+	begin
+		--si existe compania
+		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
+		begin
+			--si existe terminal
+			if exists(select Codigo from Terminal where Codigo=@Destino and Estado=1)
+			begin
+				--si existe empleado
+				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
+				begin 
+					begin transaction
+						--insertar viaje
+						insert into Viaje values(@NViaje,@NCompania,@Destino,@EmpleadoMOG,@FPartida,@FDestino,@CantAsientos)
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -6
+						end
+							
+						--insertar viaje nacional
+						insert into ViajeNacional values(@NViaje,@CantParadas)
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -6
+						end
+						return 1
+					commit transaction
+				end
+					
 				--si no existe empleado
 				else
 				begin
@@ -471,6 +656,115 @@ AS BEGIN
 				end
 			end
 			
+			--si no existe terminal
+			else
+			begin
+				return -2
+			end
+		end
+			
+		--si no existe compania
+		else
+		begin
+			return -3
+		end
+	end
+		
+	--si existe viaje nacional
+	else 
+	begin
+		return -4
+	end	
+END
+GO
+
+--BAJA
+CREATE PROC BajaViajeNacional
+@NViaje int
+AS BEGIN
+	--verificar si existe viaje nacional
+	if exists(select NViaje from ViajeNacional where NViaje=@NViaje)
+	begin
+		begin transaction
+			--eliminar viaje nacional
+			delete ViajeNacional where NViaje=@NViaje
+			--verificar error
+			if(@@ERROR!=0)
+			begin
+				rollback transaction
+				return -3
+			end
+			--eliminar viaje
+			delete Viaje where NViaje=@NViaje
+			--verificar error
+			if(@@ERROR!=0)
+			begin
+				rollback transaction
+				return -3
+			end
+			return 1
+		commit transaction
+	end
+		
+	--si no existe viaje nacional
+	else 
+	begin
+		return -2
+	end
+END
+GO
+
+--MODIFICAR
+CREATE PROC ModificarViajeNacional
+@NViaje int,
+@NCompania varchar(20),
+@Destino varchar(3),
+@EmpleadoMOG int,
+@FPartida datetime,
+@FDestino datetime,
+@CantAsientos int,
+@CantParadas int
+AS BEGIN
+	--si existe viaje nacional
+	if exists(select NViaje from ViajeNacional where NViaje=@NViaje)
+	begin
+		--si existe compania
+		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
+		begin
+			--si existe terminal
+			if exists(select Codigo from Terminal where Codigo=@Destino and Estado=1)
+			begin
+				--si existe empleado
+				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
+				begin 
+					begin transaction
+						--actualizar viaje
+						update Viaje set NCompania=@NCompania,Destino=@Destino,EmpleadoMOG=@EmpleadoMOG,FPartida=@FPartida,FDestino=@FDestino,CantAsientos=@CantAsientos where NViaje=@NViaje
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -7
+						end
+						--actualizar viaje internacional
+						update ViajeNacional set CantParadas=@CantParadas where NViaje=@NViaje
+						--verificar error
+						if(@@ERROR!=0)
+						begin
+							rollback transaction
+							return -7
+						end
+						return 1
+					commit transaction
+				end
+					
+				--si no existe empleado
+				else
+				begin
+					return -1
+				end
+			end
+				
 			--si no existe terminal
 			else
 			begin
@@ -485,9 +779,20 @@ AS BEGIN
 		end
 	end
 	
-	--si no existe viaje
-	else 
+	--si no existe viaje nacional
+	else
 	begin
 		return -4
 	end
 END
+GO
+
+--BUSQUEDA
+CREATE PROC BuscarViajeNacional
+@NViaje int
+AS BEGIN
+	select * from ViajeNacional join Viaje on ViajeNacional.NViaje=Viaje.NViaje where ViajeNacional.NViaje=@NViaje and Viaje.FPartida>CURRENT_TIMESTAMP
+END
+GO
+
+
