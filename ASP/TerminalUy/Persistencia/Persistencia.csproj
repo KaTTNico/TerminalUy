@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>b3e4f4f1-ef5e-4254-ab2e-aa741c1d9031</ProjectGuid>
+    <ProjectGuid>{C314C430-27A2-4E8A-A2D3-6E2A802E907F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Persistencia</RootNamespace>
@@ -40,7 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="FabricaPersistencia.cs" />
+    <Compile Include="iPersistenciaCompania.cs" />
+    <Compile Include="iPersistenciaEmpleado.cs" />
+    <Compile Include="iPersistenciaFacilidades.cs" />
+    <Compile Include="iPersistenciaTerminal.cs" />
+    <Compile Include="iPersistenciaViajeInternacional.cs" />
+    <Compile Include="iPersistenciaViajeNacional.cs" />
+    <Compile Include="PersistenciaCompania.cs" />
+    <Compile Include="PersistenciaEmpleado.cs" />
+    <Compile Include="PersistenciaFacilidades.cs" />
+    <Compile Include="PersistenciaTerminal.cs" />
+    <Compile Include="PersistenciaViajeInternacional.cs" />
+    <Compile Include="PersistenciaViajeNacional.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

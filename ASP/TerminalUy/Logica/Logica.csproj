@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>dc1b821a-3229-405b-a205-bc2ff9e4019e</ProjectGuid>
+    <ProjectGuid>{DE68CA33-7B6F-41C0-99D6-B92E341C388A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Logica</RootNamespace>
@@ -40,8 +40,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="FabricaLogica.cs" />
+    <Compile Include="iLogicaCompania.cs" />
+    <Compile Include="iLogicaEmpleado.cs" />
+    <Compile Include="iLogicaFacilidades.cs" />
+    <Compile Include="iLogicaTerminal.cs" />
+    <Compile Include="iLogicaViajeInternacional.cs" />
+    <Compile Include="iLogicaViajeNacional.cs" />
+    <Compile Include="LogicaCompania.cs" />
+    <Compile Include="LogicaEmpleado.cs" />
+    <Compile Include="LogicaFacilidades.cs" />
+    <Compile Include="LogicaTerminal.cs" />
+    <Compile Include="LogicaViajeInternacional.cs" />
+    <Compile Include="LogicaViajeNacional.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EntidadesCompartidas\EntidadesCompartidas.csproj">
+      <Project>{891871AA-EFE6-4919-B957-E1EF206FFA4F}</Project>
+      <Name>EntidadesCompartidas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Persistencia\Persistencia.csproj">
+      <Project>{C314C430-27A2-4E8A-A2D3-6E2A802E907F}</Project>
+      <Name>Persistencia</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
