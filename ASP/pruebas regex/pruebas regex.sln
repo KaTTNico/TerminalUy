@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pruebas regex", "pruebas regex\pruebas regex.csproj", "{3500EF5D-6AD5-45D7-BD70-F6104E3A8D06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3500EF5D-6AD5-45D7-BD70-F6104E3A8D06}.Debug|x86.ActiveCfg = Debug|x86
+		{3500EF5D-6AD5-45D7-BD70-F6104E3A8D06}.Debug|x86.Build.0 = Debug|x86
+		{3500EF5D-6AD5-45D7-BD70-F6104E3A8D06}.Release|x86.ActiveCfg = Release|x86
+		{3500EF5D-6AD5-45D7-BD70-F6104E3A8D06}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

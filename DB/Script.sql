@@ -36,7 +36,7 @@ go
 CREATE TABLE Compania(
 Nombre varchar(20) primary key,
 Direccion varchar(30)not null,
-Telefono int not null check(len(Telefono)>7),
+Telefono int not null check(len(Telefono)=9 or len(Telefono)=8),
 Estado bit not null default 1
 );
 go

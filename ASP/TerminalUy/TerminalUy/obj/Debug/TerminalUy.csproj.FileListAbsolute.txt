@@ -1,0 +1,4 @@
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\TerminalUy\TerminalUy\bin\TerminalUy.dll
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\TerminalUy\TerminalUy\bin\TerminalUy.pdb
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\TerminalUy\TerminalUy\obj\Debug\TerminalUy.dll
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\TerminalUy\TerminalUy\obj\Debug\TerminalUy.pdb

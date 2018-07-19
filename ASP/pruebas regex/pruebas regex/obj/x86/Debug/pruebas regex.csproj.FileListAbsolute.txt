@@ -1,0 +1,5 @@
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\pruebas regex\pruebas regex\bin\Debug\pruebas regex.exe
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\pruebas regex\pruebas regex\bin\Debug\pruebas regex.pdb
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\pruebas regex\pruebas regex\obj\x86\Debug\pruebas regex.exe
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\pruebas regex\pruebas regex\obj\x86\Debug\pruebas regex.pdb
+C:\Users\Nicolas\Documents\BIOS\Segundo\Obligatorios\Obligatorio\ASP\pruebas regex\pruebas regex\obj\x86\Debug\pruebas regex.csprojResolveAssemblyReference.cache
