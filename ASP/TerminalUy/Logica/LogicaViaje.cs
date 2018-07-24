@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EntidadesCompartidas;
-using Persistencia;
 
 namespace Logica
 {
-    internal class LogicaFacilidades : iLogicaFacilidades
+    internal class LogicaViaje : iLogicaViaje
     {
+        //operaciones
+
     }
 }

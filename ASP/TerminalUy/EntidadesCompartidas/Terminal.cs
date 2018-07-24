@@ -59,11 +59,11 @@ namespace EntidadesCompartidas
             set
             {
                 //verificar que tenga al menos una facilidad
-                if (value.Count() > 0)
+                if (value.Count() != null)
                 {
                     facilidades = value;
                 }
-                else { throw new Exception("La terminal debe tener al menos una facilidad."); }
+                else { throw new Exception("Error inesperado facilidad."); }
             }
         }
 

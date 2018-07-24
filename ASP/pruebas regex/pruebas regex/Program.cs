@@ -10,7 +10,7 @@ namespace pruebas_regex
     {
         static void Main(string[] args)
         {
-            int value = 26963107;
+            string value = "095114540";
             //verificar telefono
             if ((Regex.Match(value.ToString(), @"^(09)([0-9]){7}$|^(2)([0-9]){7}$")).Success)
             {

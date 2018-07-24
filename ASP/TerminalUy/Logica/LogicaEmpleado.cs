@@ -9,5 +9,34 @@ namespace Logica
 {
     internal class LogicaEmpleado : iLogicaEmpleado
     {
+        //singleton
+        private static LogicaEmpleado instancia = null;
+
+        //get instancia 
+        public static LogicaEmpleado getInstance() {return (instancia == null) ? instancia = new LogicaEmpleado() : instancia;}
+
+        //constructor por defecto 
+        private LogicaEmpleado() { }
+
+        //operaciones
+
+        //alta compania
+        public void AltaCompania(Empleado empleado)
+        {
+            iPersistenciaEmpleado fPersistencia = FabricaPersistencia.getPersistenciaEmpleado();
+        }
+
+        //baja compania
+        public void BajaEmpleado(Empleado empleado)
+        {
+            iPersistenciaEmpleado fPersistencia = FabricaPersistencia.getPersistenciaEmpleado();
+        }
+
+        //modificar compania
+        public void ModificarEmpleado(Empleado empleado)
+        {
+            iPersistenciaEmpleado fPersistencia = FabricaPersistencia.getPersistenciaEmpleado();
+        }
+
     }
 }

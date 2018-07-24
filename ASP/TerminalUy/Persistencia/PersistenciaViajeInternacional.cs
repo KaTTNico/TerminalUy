@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Persistencia
 {
-    class PersistenciaViajeInternacional
+    internal class PersistenciaViajeInternacional : iPersistenciaViajeInternacional
     {
     }
 }

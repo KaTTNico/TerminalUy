@@ -7,5 +7,7 @@ namespace Persistencia
 {
     public interface iPersistenciaCompania
     {
+        //operaciones
+        
     }
 }

@@ -43,16 +43,12 @@
     <Compile Include="FabricaLogica.cs" />
     <Compile Include="iLogicaCompania.cs" />
     <Compile Include="iLogicaEmpleado.cs" />
-    <Compile Include="iLogicaFacilidades.cs" />
     <Compile Include="iLogicaTerminal.cs" />
-    <Compile Include="iLogicaViajeInternacional.cs" />
-    <Compile Include="iLogicaViajeNacional.cs" />
+    <Compile Include="iLogicaViaje.cs" />
     <Compile Include="LogicaCompania.cs" />
     <Compile Include="LogicaEmpleado.cs" />
-    <Compile Include="LogicaFacilidades.cs" />
     <Compile Include="LogicaTerminal.cs" />
-    <Compile Include="LogicaViajeInternacional.cs" />
-    <Compile Include="LogicaViajeNacional.cs" />
+    <Compile Include="LogicaViaje.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

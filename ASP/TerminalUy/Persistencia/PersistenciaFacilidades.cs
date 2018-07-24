@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Persistencia
 {
-    class PersistenciaFacilidades
+    internal class PersistenciaFacilidades : iPersistenciaFacilidades
     {
     }
 }

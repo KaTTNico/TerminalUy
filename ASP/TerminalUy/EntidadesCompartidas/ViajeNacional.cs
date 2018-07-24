@@ -17,11 +17,11 @@ namespace EntidadesCompartidas
             get { return CantParadas; }
             set {
                 //verificar que haya al menos una parada
-                if (value > 0)
+                if (value >= 0)
                 {
                     CantParadas = value;
                 }
-                else { throw new Exception("Debe haber al menos una parada."); }
+                else { throw new Exception("El numero de paradas debe ser positivo."); }
             
             }
         }
