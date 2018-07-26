@@ -40,20 +40,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Conexion.cs" />
     <Compile Include="FabricaPersistencia.cs" />
     <Compile Include="iPersistenciaCompania.cs" />
     <Compile Include="iPersistenciaEmpleado.cs" />
-    <Compile Include="iPersistenciaFacilidades.cs" />
     <Compile Include="iPersistenciaTerminal.cs" />
     <Compile Include="iPersistenciaViajeInternacional.cs" />
     <Compile Include="iPersistenciaViajeNacional.cs" />
     <Compile Include="PersistenciaCompania.cs" />
     <Compile Include="PersistenciaEmpleado.cs" />
-    <Compile Include="PersistenciaFacilidades.cs" />
     <Compile Include="PersistenciaTerminal.cs" />
     <Compile Include="PersistenciaViajeInternacional.cs" />
     <Compile Include="PersistenciaViajeNacional.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EntidadesCompartidas\EntidadesCompartidas.csproj">
+      <Project>{891871AA-EFE6-4919-B957-E1EF206FFA4F}</Project>
+      <Name>EntidadesCompartidas</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

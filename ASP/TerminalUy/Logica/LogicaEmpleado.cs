@@ -21,7 +21,7 @@ namespace Logica
         //operaciones
 
         //alta compania
-        public void AltaCompania(Empleado empleado)
+        public void AltaEmpleado(Empleado empleado)
         {
             iPersistenciaEmpleado fPersistencia = FabricaPersistencia.getPersistenciaEmpleado();
         }

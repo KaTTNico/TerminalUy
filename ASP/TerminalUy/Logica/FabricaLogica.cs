@@ -26,7 +26,7 @@ namespace Logica
 
         //logica viaje
         public static iLogicaViaje getLogicaViaje() { 
-            return (new LogicaViaje());
+            return (LogicaViaje.getInstance());
         }
     }
 }

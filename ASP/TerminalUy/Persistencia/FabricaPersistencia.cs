@@ -11,32 +11,27 @@ namespace Persistencia
 
         //persistencia compania
         public static iPersistenciaCompania getPersistenciaCompania() { 
-            return (new PersistenciaCompania());
+            return (PersistenciaCompania.getInstance());
         }
 
         //persistencia empleado
-        public static iPersistenciaEmpleado getPersistenciaEmpleado() { 
-            return (new PersistenciaEmpleado());
-        }
-
-        //persistencia facilidades
-        public static iPersistenciaFacilidades getPersistenciaFacilidades() { 
-            return(new PersistenciaFacilidades());
+        public static iPersistenciaEmpleado getPersistenciaEmpleado() {
+            return (PersistenciaEmpleado.getInstance());
         }
 
         //persistencia terminal
-        public static iPersistenciaTerminal getPersistenciaTerminal() { 
-            return(new PersistenciaTerminal());
+        public static iPersistenciaTerminal getPersistenciaTerminal() {
+            return (PersistenciaTerminal.getInstance());
         }
 
         //persistencia viajes internacionales 
-        public static iPersistenciaViajeInternacional getPersistenciaViajeInternacionale() { 
-            return(new PersistenciaViajeInternacional());
+        public static iPersistenciaViajeInternacional getPersistenciaViajeInternacional() {
+            return (PersistenciaViajeInternacional.getInstance());
         }
 
         //persistencia viaje 
-        public static iPersistenciaViajeNacional getPersistenciaViajeNacional() { 
-            return (new PersistenciaViajeNacional());
+        public static iPersistenciaViajeNacional getPersistenciaViajeNacional() {
+            return (PersistenciaViajeNacional.getInstance());
         }
     }
 }

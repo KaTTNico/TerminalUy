@@ -155,10 +155,10 @@ AS BEGIN
 		return 1
 	end
 	
-	--de lo contrario devolver 0
+	--de lo contrario devolver -11
 	else
 	begin
-		return 0
+		return -1
 	end
 END
 GO
@@ -322,7 +322,7 @@ AS BEGIN
 	--si existe compania
 	if exists(select Nombre from Compania where Nombre=@Nombre)
 	begin
-		--si esta activa
+		--si no esta activa
 		if exists(select Nombre from Compania where Nombre=@Nombre and Estado=0)
 		begin
 			update Compania set Direccion=@Direccion,Telefono=@Telefono,Estado=1 where Nombre=@Nombre
@@ -330,7 +330,7 @@ AS BEGIN
 
 		end
 		
-		--si no esta activa
+		--si esta activa
 		else
 		begin
 			return -1
