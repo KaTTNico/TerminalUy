@@ -13,7 +13,7 @@ namespace Logica
         private static LogicaCompania instancia = null;
 
         //get instancia 
-        public static LogicaCompania getInstance() {return (instancia == null) ? instancia = new LogicaCompania() : instancia;}
+        public static LogicaCompania getInstance() {return ( (instancia)?? (instancia = new LogicaCompania()) );}
 
         //constructor por defecto 
         private LogicaCompania() { }
@@ -23,18 +23,24 @@ namespace Logica
         //alta compania
         public void AltaCompania(Compania compania) {
             iPersistenciaCompania fPersistencia = FabricaPersistencia.getPersistenciaCompania();
+            try{fPersistencia.AltaCompania(compania);}
+            catch { throw; }
         }
         
         //baja compania
         public void BajaCompania(Compania compania)
         {
             iPersistenciaCompania fPersistencia = FabricaPersistencia.getPersistenciaCompania();
+            try{fPersistencia.BajaCompania(compania);}
+            catch { throw; }
         }
         
         //modificacion compania
         public void ModificarCompania(Compania compania)
         {
             iPersistenciaCompania fPersistencia = FabricaPersistencia.getPersistenciaCompania();
+            try{fPersistencia.ModificarCompania(compania);}
+            catch { throw; }
         }
     }
 }

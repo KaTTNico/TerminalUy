@@ -13,7 +13,7 @@ namespace Logica
         private static LogicaEmpleado instancia = null;
 
         //get instancia 
-        public static LogicaEmpleado getInstance() {return (instancia == null) ? instancia = new LogicaEmpleado() : instancia;}
+        public static LogicaEmpleado getInstance() {return ( (instancia)?? (instancia = new LogicaEmpleado()) );}
 
         //constructor por defecto 
         private LogicaEmpleado() { }
@@ -24,18 +24,27 @@ namespace Logica
         public void AltaEmpleado(Empleado empleado)
         {
             iPersistenciaEmpleado fPersistencia = FabricaPersistencia.getPersistenciaEmpleado();
+
+            try { fPersistencia.AltaEmpleado(empleado);}
+            catch { throw; }
         }
 
         //baja compania
         public void BajaEmpleado(Empleado empleado)
         {
             iPersistenciaEmpleado fPersistencia = FabricaPersistencia.getPersistenciaEmpleado();
+
+            try { fPersistencia.BajaEmpleado(empleado); }
+            catch { throw; }
         }
 
         //modificar compania
         public void ModificarEmpleado(Empleado empleado)
         {
             iPersistenciaEmpleado fPersistencia = FabricaPersistencia.getPersistenciaEmpleado();
+
+            try { fPersistencia.ModificarEmpleado(empleado); }
+            catch { throw; }
         }
 
     }

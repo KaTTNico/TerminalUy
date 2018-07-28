@@ -14,7 +14,7 @@ namespace Persistencia
         private static PersistenciaCompania instancia = null;
 
         //get instancia 
-        public static PersistenciaCompania getInstance() { return (instancia == null) ? instancia = new PersistenciaCompania() : instancia; }
+        public static PersistenciaCompania getInstance() {return ( (instancia)?? (instancia=new PersistenciaCompania())  );}
 
         //constructor por defecto 
         private PersistenciaCompania() { }

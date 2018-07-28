@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
+using System.Data.SqlClient;
+using EntidadesCompartidas;
 
 namespace Persistencia
 {
@@ -15,5 +18,140 @@ namespace Persistencia
 
         //constructor por defecto 
         private PersistenciaViajeInternacional() { }
+
+        //----------------------------------------------------------------------ABM------------------------------------------------------------------------------------
+
+        //ALTA VIAJE INTERNACIONAL
+        public void AltaViajeInternacional(ViajeInternacional viajeInternacional)
+        {
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("AltaViajeInternacional", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            //parametros
+            sp.Parameters.Add("@NViaje", viajeInternacional.pNumeroViaje);
+            sp.Parameters.Add("@NCompania", viajeInternacional.pCompania.pNombre);
+            sp.Parameters.Add("@Destino", viajeInternacional.pDestino.pCiudad);
+            sp.Parameters.Add("@EmpleadoMOG", viajeInternacional.pEmpleado.pCedula);
+            sp.Parameters.Add("@FPartida", viajeInternacional.pFPartida);
+            sp.Parameters.Add("@FDestino", viajeInternacional.pFDestino);
+            sp.Parameters.Add("@CantAsientos", viajeInternacional.pCantAsientos);
+            sp.Parameters.Add("@ServicioABordo", viajeInternacional.pServicioAbordo);
+            sp.Parameters.Add("@Documentacion", viajeInternacional.pDocumentacion);
+
+            //retorno
+            SqlParameter retorno = new SqlParameter("@retorno", SqlDbType.Int);
+            retorno.Direction = ParameterDirection.ReturnValue;
+            sp.Parameters.Add("@retorno", retorno);
+
+
+            try
+            {
+                conect.Open();
+                sp.ExecuteNonQuery();
+
+                //retorno
+                if ((int)retorno.Value == 1)
+                {
+                    throw new Exception("viaje internacional dado de alta.");
+                }
+                else if ((int)retorno.Value == -4) { throw new Exception("El viaje internacional " + viajeInternacional.pNumeroViaje + " ya existe."); }
+                else if ((int)retorno.Value == -3) { throw new Exception("La compania " + viajeInternacional.pCompania.pNombre + " no existe."); }
+                else if ((int)retorno.Value == -2) { throw new Exception("La terminal " + viajeInternacional.pDestino.pCodigo + " no existe."); }
+                else if ((int)retorno.Value == -1) { throw new Exception("El empleado " + viajeInternacional.pEmpleado.pCedula + " no existe."); }
+                else if ((int)retorno.Value == -5) { throw new Exception("Error inesperado."); }
+            }
+            catch { throw; }
+
+            finally { conect.Close(); }
+        }
+
+        //MODIFICAR VIAJE INTERNACIONAL
+        public void ModificarViajeInternacional(ViajeInternacional viajeInternacional)
+        {
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("ModificarViajeInternacional", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            //parametros
+            sp.Parameters.Add("@NViaje", viajeInternacional.pNumeroViaje);
+            sp.Parameters.Add("@NCompania", viajeInternacional.pCompania.pNombre);
+            sp.Parameters.Add("@Destino", viajeInternacional.pDestino.pCiudad);
+            sp.Parameters.Add("@EmpleadoMOG", viajeInternacional.pEmpleado.pCedula);
+            sp.Parameters.Add("@FPartida", viajeInternacional.pFPartida);
+            sp.Parameters.Add("@FDestino", viajeInternacional.pFDestino);
+            sp.Parameters.Add("@CantAsientos", viajeInternacional.pCantAsientos);
+            sp.Parameters.Add("@ServicioABordo", viajeInternacional.pServicioAbordo);
+            sp.Parameters.Add("@Documentacion", viajeInternacional.pDocumentacion);
+
+            //retorno
+            SqlParameter retorno = new SqlParameter("@retorno", SqlDbType.Int);
+            retorno.Direction = ParameterDirection.ReturnValue;
+            sp.Parameters.Add("@retorno", retorno);
+
+
+            try
+            {
+                conect.Open();
+                sp.ExecuteNonQuery();
+
+                //retorno
+                if ((int)retorno.Value == 1)
+                {
+                    throw new Exception("viaje internacional modificado.");
+                }
+                else if ((int)retorno.Value == -4) { throw new Exception("El viaje internacional " + viajeInternacional.pNumeroViaje + " no existe."); }
+                else if ((int)retorno.Value == -3) { throw new Exception("La compania " + viajeInternacional.pCompania.pNombre + " no existe."); }
+                else if ((int)retorno.Value == -2) { throw new Exception("La terminal " + viajeInternacional.pDestino.pCodigo + " no existe."); }
+                else if ((int)retorno.Value == -1) { throw new Exception("El empleado " + viajeInternacional.pEmpleado.pCedula + " no existe."); }
+                else if ((int)retorno.Value == -6) { throw new Exception("Error inesperado."); }
+            }
+            catch { throw; }
+
+            finally { conect.Close(); }
+        }
+
+        //BAJA VIAJE INTERNACIONAL
+        public void BajaViajeInternacional(ViajeInternacional viajeInternacional)
+        {
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("BajaViajeInternacional", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            //parametros
+            sp.Parameters.Add("@NViaje", viajeInternacional.pNumeroViaje);
+
+            //retorno
+            SqlParameter retorno = new SqlParameter("@retorno", SqlDbType.Int);
+            retorno.Direction = ParameterDirection.ReturnValue;
+            sp.Parameters.Add("@retorno", retorno);
+
+
+            try
+            {
+                conect.Open();
+                sp.ExecuteNonQuery();
+
+                //retorno
+                if ((int)retorno.Value == 1)
+                {
+                    throw new Exception("viaje internacional eliminado.");
+                }
+                else if ((int)retorno.Value == -2) { throw new Exception("El viaje internacional " + viajeInternacional.pNumeroViaje + " no existe."); }
+                else if ((int)retorno.Value == -3) { throw new Exception("Error inesperado."); }
+            }
+            catch { throw; }
+
+            finally { conect.Close(); }
+        }
     }
 }

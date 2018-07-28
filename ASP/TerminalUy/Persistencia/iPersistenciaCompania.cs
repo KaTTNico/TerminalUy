@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EntidadesCompartidas;
 
 namespace Persistencia
 {
@@ -9,5 +10,13 @@ namespace Persistencia
     {
         //operaciones
         
+        //ALTA COMPANIA 
+        void AltaCompania(Compania compania);
+
+        //BAJA COMPANIA
+        void BajaCompania(Compania compania);
+
+        //MODIFICAR COMPANIA
+        void ModificarCompania(Compania compania);
     }
 }

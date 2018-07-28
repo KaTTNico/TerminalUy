@@ -13,7 +13,7 @@ namespace Logica
         private static LogicaViaje instancia = null;
 
         //get instancia 
-        public static LogicaViaje getInstance() { return (instancia == null) ? instancia = new LogicaViaje() : instancia; }
+        public static LogicaViaje getInstance() {return ( (instancia)?? (instancia = new LogicaViaje()) );}
 
         //constructor por defecto 
         private LogicaViaje() { }
@@ -22,46 +22,65 @@ namespace Logica
 
         //ALTA VIAJE
         public void AltaViaje(Viaje viaje){
-            //verificar tipo de viaje
-            if (viaje is ViajeInternacional)
+            try
             {
-                //llamar persistencia viaje internacional
-                iPersistenciaViajeInternacional fPersistencia = FabricaPersistencia.getPersistenciaViajeInternacional();
+                //verificar tipo de viaje
+                if (viaje is ViajeInternacional)
+                {
+                    //llamar persistencia viaje internacional
+                    iPersistenciaViajeInternacional fPersistencia = FabricaPersistencia.getPersistenciaViajeInternacional();
+                    fPersistencia.AltaViajeInternacional((ViajeInternacional)viaje);
+                }
+                else
+                {
+                    //llamar persistencia viaje nacional
+                    iPersistenciaViajeNacional fPersistencia = FabricaPersistencia.getPersistenciaViajeNacional();
+                    fPersistencia.AltaViajeNacional((ViajeNacional)viaje);
+                }
             }
-            else {
-                //llamar persistencia viaje nacional
-                iPersistenciaViajeNacional fPersistencia = FabricaPersistencia.getPersistenciaViajeNacional();
-            }
+            catch { throw; }
         }
 
         //MODIFICAR VIAJE
         public void ModificarViaje(Viaje viaje) {
-            //verificar tipo de viaje
-            if (viaje is ViajeInternacional)
+            try
             {
-                //llamar persistencia viaje internacional
-                iPersistenciaViajeInternacional fPersistencia = FabricaPersistencia.getPersistenciaViajeInternacional();
+                //verificar tipo de viaje
+                if (viaje is ViajeInternacional)
+                {
+                    //llamar persistencia viaje internacional
+                    iPersistenciaViajeInternacional fPersistencia = FabricaPersistencia.getPersistenciaViajeInternacional();
+                    fPersistencia.ModificarViajeInternacional((ViajeInternacional)viaje);
+                }
+                else
+                {
+                    //llamar persistencia viaje nacional
+                    iPersistenciaViajeNacional fPersistencia = FabricaPersistencia.getPersistenciaViajeNacional();
+                    fPersistencia.ModificarViajeNacional((ViajeNacional)viaje);
+                }
             }
-            else
-            {
-                //llamar persistencia viaje nacional
-                iPersistenciaViajeNacional fPersistencia = FabricaPersistencia.getPersistenciaViajeNacional();
-            }
+            catch {throw; }
         }
 
         //BAJA VIAJE
         public void BajaViaje(Viaje viaje) {
-            //verificar tipo de viaje
-            if (viaje is ViajeInternacional)
+            try
             {
-                //llamar persistencia viaje internacional
-                iPersistenciaViajeInternacional fPersistencia = FabricaPersistencia.getPersistenciaViajeInternacional();
+                //verificar tipo de viaje
+                if (viaje is ViajeInternacional)
+                {
+                    //llamar persistencia viaje internacional
+                    iPersistenciaViajeInternacional fPersistencia = FabricaPersistencia.getPersistenciaViajeInternacional();
+                    fPersistencia.BajaViajeInternacional((ViajeInternacional)viaje);
+                }
+                else
+                {
+                    //llamar persistencia viaje nacional
+                    iPersistenciaViajeNacional fPersistencia = FabricaPersistencia.getPersistenciaViajeNacional();
+                    fPersistencia.BajaViajeNacional((ViajeNacional)viaje);
+                }
             }
-            else
-            {
-                //llamar persistencia viaje nacional
-                iPersistenciaViajeNacional fPersistencia = FabricaPersistencia.getPersistenciaViajeNacional();
-            }
+            catch { throw; }
         }
 
     }
