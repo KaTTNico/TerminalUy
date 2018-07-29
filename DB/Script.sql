@@ -418,8 +418,8 @@ CREATE PROC AltaViajeInternacional
 @ServicioABordo bit,
 @Documentacion varchar(100)
 AS BEGIN
-	--si no existe viaje internacional
-	if not exists(select NViaje from ViajeInternacional where NViaje=@NViaje)
+	--si no existe viaje 
+	if not exists(select NViaje from Viaje where NViaje=@NViaje)
 	begin
 		--si existe compania
 		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
@@ -430,26 +430,36 @@ AS BEGIN
 				--si existe empleado
 				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
 				begin 
-					begin transaction
-						--insertar viaje
-						insert into Viaje values(@NViaje,@NCompania,@Destino,@EmpleadoMOG,@FPartida,@FDestino,@CantAsientos)
-						--verificar error
-						if(@@ERROR!=0)
-						begin
-							rollback transaction
-							return -5
-						end
-						
-						--insertar viaje internacional
-						insert into ViajeInternacional values(@NViaje,@ServicioABordo,@Documentacion)
-						--verificar error
-						if(@@ERROR!=0)
-						begin
-							rollback transaction
-							return -5
-						end
-						return 1
-					commit transaction
+					--si no existe ningun viaje al mismo destino que parta en menos de 2 horas de diferencia
+					if not exists(select * from Viaje where Destino=@Destino and DATEDIFF(HOUR ,FPartida,@FPartida)<=2)
+					begin
+						begin transaction
+							--insertar viaje
+							insert into Viaje values(@NViaje,@NCompania,@Destino,@EmpleadoMOG,@FPartida,@FDestino,@CantAsientos)
+							--verificar error
+							if(@@ERROR!=0)
+							begin
+								rollback transaction
+								return -5
+							end
+							
+							--insertar viaje internacional
+							insert into ViajeInternacional values(@NViaje,@ServicioABordo,@Documentacion)
+							--verificar error
+							if(@@ERROR!=0)
+							begin
+								rollback transaction
+								return -5
+							end
+							return 1
+						commit transaction
+					end
+					
+					--si existe un viaje al mismo destino con 2 horas o menos de diferencia de partida devolver -6
+					else
+					begin
+						return -6
+					end
 				end
 				
 				--si no existe empleado
@@ -530,8 +540,8 @@ CREATE PROC ModificarViajeInternacional
 @ServicioABordo bit,
 @Documentacion varchar(100)
 AS BEGIN
-	--si existe viaje nacional
-	if exists(select NViaje from ViajeInternacional where NViaje=@NViaje)
+	--si existe viaje 
+	if exists(select NViaje from Viaje where NViaje=@NViaje)
 	begin
 		--si existe compania
 		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
@@ -542,27 +552,37 @@ AS BEGIN
 				--si existe empleado
 				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
 				begin 
-					begin transaction
-						--actualizar viaje
-						update Viaje set NCompania=@NCompania,Destino=@Destino,EmpleadoMOG=@EmpleadoMOG,FPartida=@FPartida,FDestino=@FDestino,CantAsientos=@CantAsientos where NViaje=@NViaje
-						--verificar error
-						if(@@ERROR!=0)
-						begin
-							rollback transaction
-							return -6
-						end
-						
-						--actualizar viaje internacional
-						update ViajeInternacional set ServicioABordo=@ServicioABordo,Documentacion=@Documentacion where NViaje=@NViaje
-						--verificar error
-						if(@@ERROR!=0)
-						begin
-							rollback transaction
-							return -6
-						end
-						
-						return 1
-					commit transaction	
+					--si no existe ningun viaje al mismo destino que parta en menos de 2 horas de diferencia y que no sea el mismo viaje que estamos modificando
+					if not exists(select * from Viaje where Destino=@Destino and DATEDIFF(HOUR ,FPartida,@FPartida)<=2 and NViaje!=@NViaje)
+					begin
+						begin transaction
+							--actualizar viaje
+							update Viaje set NCompania=@NCompania,Destino=@Destino,EmpleadoMOG=@EmpleadoMOG,FPartida=@FPartida,FDestino=@FDestino,CantAsientos=@CantAsientos where NViaje=@NViaje
+							--verificar error
+							if(@@ERROR!=0)
+							begin
+								rollback transaction
+								return -6
+							end
+							
+							--actualizar viaje internacional
+							update ViajeInternacional set ServicioABordo=@ServicioABordo,Documentacion=@Documentacion where NViaje=@NViaje
+							--verificar error
+							if(@@ERROR!=0)
+							begin
+								rollback transaction
+								return -6
+							end
+							
+							return 1
+						commit transaction	
+					
+					end
+					--si existe un viaje al mismo destino con 2 horas o menos de diferencia de partida devolver -7
+					else
+					begin
+						return -7
+					end
 				end
 					
 				--si no existe empleado
@@ -615,8 +635,8 @@ CREATE PROC AltaViajeNacional
 @CantAsientos int,
 @CantParadas int
 AS BEGIN
-	--si no existe viaje nacional
-	if not exists(select NViaje from ViajeNacional where NViaje=@NViaje)
+	--si no existe viaje 
+	if not exists(select NViaje from Viaje where NViaje=@NViaje)
 	begin
 		--si existe compania
 		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
@@ -627,6 +647,9 @@ AS BEGIN
 				--si existe empleado
 				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
 				begin 
+					--si no existe ningun viaje al mismo destino que parta en menos de 2 horas de diferencia
+					if not exists(select * from Viaje where Destino=@Destino and DATEDIFF(HOUR ,FPartida,@FPartida)<=2)
+					begin
 					begin transaction
 						--insertar viaje
 						insert into Viaje values(@NViaje,@NCompania,@Destino,@EmpleadoMOG,@FPartida,@FDestino,@CantAsientos)
@@ -647,6 +670,13 @@ AS BEGIN
 						end
 						return 1
 					commit transaction
+					end
+					
+					--si existe un viaje al mismo destino que parta con menos de 2 horas de diferencia devolver -7
+					else
+					begin
+						return -7
+					end
 				end
 					
 				--si no existe empleado
@@ -725,8 +755,8 @@ CREATE PROC ModificarViajeNacional
 @CantAsientos int,
 @CantParadas int
 AS BEGIN
-	--si existe viaje nacional
-	if exists(select NViaje from ViajeNacional where NViaje=@NViaje)
+	--si existe viaje 
+	if exists(select NViaje from Viaje where NViaje=@NViaje)
 	begin
 		--si existe compania
 		if exists(select Nombre from Compania where Nombre=@NCompania and Estado=1)
@@ -737,25 +767,35 @@ AS BEGIN
 				--si existe empleado
 				if exists(select Cedula from Empleado where Cedula=@EmpleadoMOG and Estado=1)
 				begin 
-					begin transaction
-						--actualizar viaje
-						update Viaje set NCompania=@NCompania,Destino=@Destino,EmpleadoMOG=@EmpleadoMOG,FPartida=@FPartida,FDestino=@FDestino,CantAsientos=@CantAsientos where NViaje=@NViaje
-						--verificar error
-						if(@@ERROR!=0)
-						begin
-							rollback transaction
-							return -7
-						end
-						--actualizar viaje internacional
-						update ViajeNacional set CantParadas=@CantParadas where NViaje=@NViaje
-						--verificar error
-						if(@@ERROR!=0)
-						begin
-							rollback transaction
-							return -7
-						end
-						return 1
-					commit transaction
+					--si no existe ningun viaje al mismo destino que parta en menos de 2 horas de diferencia y que no sea el mismo viaje que estamos modificando
+					if not exists(select * from Viaje where Destino=@Destino and DATEDIFF(HOUR ,FPartida,@FPartida)<=2 and NViaje!=@NViaje)
+					begin
+						begin transaction
+							--actualizar viaje
+							update Viaje set NCompania=@NCompania,Destino=@Destino,EmpleadoMOG=@EmpleadoMOG,FPartida=@FPartida,FDestino=@FDestino,CantAsientos=@CantAsientos where NViaje=@NViaje
+							--verificar error
+							if(@@ERROR!=0)
+							begin
+								rollback transaction
+								return -7
+							end
+							--actualizar viaje internacional
+							update ViajeNacional set CantParadas=@CantParadas where NViaje=@NViaje
+							--verificar error
+							if(@@ERROR!=0)
+							begin
+								rollback transaction
+								return -7
+							end
+							return 1
+						commit transaction
+					end
+					
+					--si ya hay un viaje que no sea el que estoy modificando con el mismo destino con menos de 2 horas de diferencia de partida devolver -8
+					else
+					begin
+						return -8
+					end
 				end
 					
 				--si no existe empleado
@@ -793,6 +833,4 @@ CREATE PROC BuscarViajeNacional
 AS BEGIN
 	select * from ViajeNacional join Viaje on ViajeNacional.NViaje=Viaje.NViaje where ViajeNacional.NViaje=@NViaje and Viaje.FPartida>CURRENT_TIMESTAMP
 END
-GO
-
 
