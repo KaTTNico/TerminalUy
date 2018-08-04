@@ -152,5 +152,39 @@ namespace Persistencia
 
             finally { conect.Close(); }
         }
+
+        //----------------------------------------------------------------------BUSQUEDAS------------------------------------------------------------------------------------
+
+        //LISTAR VIAJES NACICONALES
+        public List<Viaje> ListarViajesNacionales() {
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("ListarViajesNacionales", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            //reader
+            SqlDataReader reader;
+            //Lista
+            List<Viaje> lista= new List<Viaje>();
+
+            try
+            {
+                conect.Open();
+                reader=sp.ExecuteReader();
+
+                if(reader.HasRows){
+                    while(reader.Read()){
+                        ViajeNacional viaje = new ViajeNacional(Convert.ToInt32(reader[0]), ((PersistenciaCompania.getInstance()).BusarCompania(reader[1].ToString())), ((PersistenciaTerminal.getInstance()).BuscarTerminal(reader[2].ToString())), ((PersistenciaEmpleado.getInstance().BuscarEmepleado(Convert.ToInt32(reader[3])))), Convert.ToDateTime(reader[4]), Convert.ToDateTime(reader[5]), Convert.ToInt32(reader[6]), Convert.ToInt32(reader[7]));
+                        lista.Add(viaje);
+                    }
+                }
+                return lista;
+            }
+            catch { throw; }
+
+            finally { conect.Close(); }
+        }
     }
 }

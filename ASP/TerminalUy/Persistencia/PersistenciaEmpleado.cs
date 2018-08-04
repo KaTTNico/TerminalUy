@@ -132,5 +132,44 @@ namespace Persistencia
 
             finally { conect.Close(); }
         }
+
+
+        //BUSCAR COMPANIA
+        public Empleado BuscarEmepleado(int cedula)
+        {
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("ListarViajesInternacionales", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            ///parametro
+            sp.Parameters.Add("@Cedula", cedula);
+            //reader
+            SqlDataReader reader;
+
+            Empleado empleado;
+            try
+            {
+                conect.Open();
+                reader = sp.ExecuteReader();
+
+                //si hay datos
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    empleado = new Empleado(Convert.ToInt32(reader[0]),reader[1].ToString(),reader[2].ToString());
+                }
+                else { throw new Exception("No se encontro ninguna compania con ese nombre."); }
+
+                return empleado;
+            }
+            catch { throw; }
+
+            finally { conect.Close(); }
+        }
+        //ListarEmpleados
+        //ListarEmpleadosActivos
     }
 }

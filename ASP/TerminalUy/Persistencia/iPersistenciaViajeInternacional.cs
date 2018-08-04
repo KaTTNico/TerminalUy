@@ -18,5 +18,8 @@ namespace Persistencia
 
         //MODIFICAR VIAJE INTERNACIONAL
         void ModificarViajeInternacional(ViajeInternacional viajeInterNacional);
+
+        //LISTAR VIAJES INTERNACIONALES
+        List<Viaje> ListarViajesInternacionales();
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="iPersistenciaViajeNacional.cs" />
     <Compile Include="PersistenciaCompania.cs" />
     <Compile Include="PersistenciaEmpleado.cs" />
+    <Compile Include="PersistenciaFacilidades.cs" />
     <Compile Include="PersistenciaTerminal.cs" />
     <Compile Include="PersistenciaViajeInternacional.cs" />
     <Compile Include="PersistenciaViajeNacional.cs" />

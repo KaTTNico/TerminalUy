@@ -28,7 +28,7 @@ namespace EntidadesCompartidas
 
         //constructor
 
-        public ViajeNacional(int cantParadas, int numeroViaje, Compania compania, Terminal destino, Empleado empleado, DateTime fPartida, DateTime fDestino, int cantAsientos)
+        public ViajeNacional(int numeroViaje, Compania compania, Terminal destino, Empleado empleado, DateTime fPartida, DateTime fDestino, int cantAsientos, int cantParadas)
             : base(numeroViaje, compania, destino, empleado, fPartida, fDestino, cantAsientos) {
                 pCantParadas = cantParadas;
         }

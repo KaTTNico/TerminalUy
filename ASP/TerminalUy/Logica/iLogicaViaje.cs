@@ -18,5 +18,8 @@ namespace Logica
 
         //BAJA VIAJE
         void BajaViaje(Viaje viaje);
+
+        //LISTAR  VIAJES
+        List<Viaje> ListarViajes();
     }
 }

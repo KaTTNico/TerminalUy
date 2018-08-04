@@ -45,14 +45,21 @@ namespace Persistencia
             try
             {
                 conect.Open();
+                sp.Transaction.Connection.BeginTransaction();
+                
+                //alta terminal
                 sp.ExecuteNonQuery();
+
+                //alta facilidades
+                PersistenciaFacilidades.Altafacilidad(terminal);
 
                 //retorno
                 if ((int)retorno.Value == 1)
                 {
+                    sp.Transaction.Commit();
                     throw new Exception("Terminal dada de alta.");
                 }
-                else if ((int)retorno.Value == -1) { throw new Exception("La terminal " + terminal.pCodigo + " ya existe."); }
+                else if ((int)retorno.Value == -1) { sp.Transaction.Rollback(); throw new Exception("La terminal " + terminal.pCodigo + " ya existe."); }
             }
             catch { throw; }
 
@@ -133,5 +140,53 @@ namespace Persistencia
 
             finally { conect.Close(); }
         }
+
+        //BUSCAR TERMINAL
+        public Terminal BuscarTerminal(string codigo) { 
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("BuscarFacilidades", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            //reader
+            SqlDataReader reader;
+            //Lista
+            List<Facilidades> lista = new List<Facilidades>();
+            //terminal
+            Terminal terminal;
+
+            try
+            {
+                conect.Open();
+                reader=sp.ExecuteReader();
+
+                if(reader.HasRows){
+                    while(reader.Read()){
+                        Facilidades facilidad = new Facilidades(reader[1].ToString());
+                        lista.Add(facilidad);
+                    }
+                }
+                
+                sp = new SqlCommand("BuscarTerminal");
+                reader = sp.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    terminal = new Terminal(reader[0].ToString(), reader[1].ToString(), reader[2].ToString(), lista);
+                }
+                else { throw new Exception("No se encontro ninguna terminal"); }
+
+                return terminal;
+            }
+            catch { throw; }
+
+            finally { conect.Close(); }
+        }
+
+        //ListarTerminalesActivas
+        //ListarTerminales
     }
 }

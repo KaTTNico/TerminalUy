@@ -83,5 +83,13 @@ namespace Logica
             catch { throw; }
         }
 
+        //LISTAR VIAJES
+        public List<Viaje> ListarViajes() { 
+            //llamar persistencia 
+            List<Viaje> lista = FabricaPersistencia.getPersistenciaViajeInternacional().ListarViajesInternacionales();
+            //lista.AddRange();
+            return lista;
+        }
+
     }
 }

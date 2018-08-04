@@ -18,5 +18,8 @@ namespace Persistencia
 
         //MODIFICAR COMPANIA
         void ModificarCompania(Compania compania);
+        
+        //BUSCAR COMPANIA
+        public Compania BuscarCompania(string Nombre);
     }
 }

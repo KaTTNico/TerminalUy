@@ -15,7 +15,7 @@ namespace Logica
         }
 
         //logica empleado
-        public static iLogicaEmpleado getLogiaEmpleado() {
+        public static iLogicaEmpleado getLogicaEmpleado() {
             return (LogicaEmpleado.getInstance());
         }
 

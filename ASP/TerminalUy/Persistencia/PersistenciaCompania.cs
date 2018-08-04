@@ -129,5 +129,42 @@ namespace Persistencia
 
             finally { conect.Close(); }
         }
+
+        //BUSCAR COMPANIA
+        public Compania BusarCompania(string Nombre) {
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("BuscarCompania", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            ///parametro
+            sp.Parameters.Add("@Nombre", Nombre);
+            //reader
+            SqlDataReader reader;
+
+            Compania compania;
+            try
+            {
+                conect.Open();
+                reader=sp.ExecuteReader();
+
+                //si hay datos
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    compania = new Compania(reader[0].ToString(), reader[1].ToString(), Convert.ToInt32(reader[2]));
+                }
+                else { throw new Exception("No se encontro ninguna compania con ese nombre."); }
+
+                return compania; 
+            }
+            catch { throw; }
+
+            finally { conect.Close(); }
+        }
+        //ListaCompaniasActivas
+        //ListarCompanias
     }
 }
