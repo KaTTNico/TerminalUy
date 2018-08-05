@@ -30,6 +30,7 @@ namespace Persistencia
             //sp
             SqlCommand sp = new SqlCommand("AltaTerminal", conect);
             sp.CommandType = CommandType.StoredProcedure;
+            SqlTransaction transact = null;
 
             //parametros
             sp.Parameters.Add("@Codigo", terminal.pCodigo);
@@ -45,23 +46,24 @@ namespace Persistencia
             try
             {
                 conect.Open();
-                sp.Transaction.Connection.BeginTransaction();
+                transact = conect.BeginTransaction();
+                sp.Transaction = transact;
                 
                 //alta terminal
                 sp.ExecuteNonQuery();
 
-                //alta facilidades
-                PersistenciaFacilidades.Altafacilidad(terminal);
-
                 //retorno
                 if ((int)retorno.Value == 1)
                 {
-                    sp.Transaction.Commit();
+                    //alta facilidades
+                    PersistenciaFacilidades.Altafacilidad(terminal, transact);
+
                     throw new Exception("Terminal dada de alta.");
                 }
-                else if ((int)retorno.Value == -1) { sp.Transaction.Rollback(); throw new Exception("La terminal " + terminal.pCodigo + " ya existe."); }
+                else if ((int)retorno.Value == -1) { throw new Exception("La terminal " + terminal.pCodigo + " ya existe."); }
+                transact.Commit();
             }
-            catch { throw; }
+            catch { transact.Rollback(); throw; }
 
             finally { conect.Close(); }
         }
@@ -75,6 +77,7 @@ namespace Persistencia
             //sp
             SqlCommand sp = new SqlCommand("ModificarTerminal", conect);
             sp.CommandType = CommandType.StoredProcedure;
+            SqlTransaction transact = null;
 
             //parametros
             sp.Parameters.Add("@Codigo", terminal.pCodigo);
@@ -90,16 +93,16 @@ namespace Persistencia
             try
             {
                 conect.Open();
+                transact = conect.BeginTransaction();
+                sp.Transaction = transact;
                 sp.ExecuteNonQuery();
 
                 //retorno
-                if ((int)retorno.Value == 1)
-                {
-                    throw new Exception("Terminal dada de alta.");
-                }
-                else if ((int)retorno.Value == -1) { throw new Exception("La terminal " + terminal.pCodigo + " no existe."); }
+                if ((int)retorno.Value == 1){throw new Exception("Terminal modificada.");}
+                if ((int)retorno.Value == -1) { throw new Exception("La terminal " + terminal.pCodigo + " no existe."); }
+                sp.Transaction.Commit();
             }
-            catch { throw; }
+            catch { sp.Transaction.Rollback(); throw; }
 
             finally { conect.Close(); }
         }
@@ -147,8 +150,11 @@ namespace Persistencia
             SqlConnection conect = new SqlConnection(Conexion.Cnn);
 
             //sp
-            SqlCommand sp = new SqlCommand("BuscarFacilidades", conect);
+            SqlCommand sp = new SqlCommand("BuscarTerminal", conect);
             sp.CommandType = CommandType.StoredProcedure;
+
+            //parametro
+            sp.Parameters.Add("@Codigo",codigo);
 
             //reader
             SqlDataReader reader;
@@ -162,20 +168,11 @@ namespace Persistencia
                 conect.Open();
                 reader=sp.ExecuteReader();
 
-                if(reader.HasRows){
-                    while(reader.Read()){
-                        Facilidades facilidad = new Facilidades(reader[1].ToString());
-                        lista.Add(facilidad);
-                    }
-                }
-                
-                sp = new SqlCommand("BuscarTerminal");
-                reader = sp.ExecuteReader();
-
                 if (reader.HasRows)
                 {
                     reader.Read();
                     terminal = new Terminal(reader[0].ToString(), reader[1].ToString(), reader[2].ToString(), lista);
+                    terminal.pFacilidades = PersistenciaFacilidades.BuscarFacilidades(terminal);
                 }
                 else { throw new Exception("No se encontro ninguna terminal"); }
 

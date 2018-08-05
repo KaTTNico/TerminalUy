@@ -21,5 +21,8 @@ namespace Persistencia
 
         //LISTAR VIAJES INTERNACIONALES
         List<Viaje> ListarViajesInternacionales();
+        
+        //BUSCAR VIAJE INTERNACIONAL
+        ViajeInternacional BuscarViajeInternacional(int NViaje);
     }
 }

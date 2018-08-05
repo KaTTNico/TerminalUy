@@ -18,7 +18,7 @@ namespace EntidadesCompartidas
             get { return Facilidad; }
             set { 
                 //verificar que no se pase de la tabla.
-                if ((Regex.Match(value,@"^([a-zA-Z]){5,20}$")).Success)
+                if ((Regex.Match(value,@"^([a-zA-Z-]){5,20}$")).Success)
                 {
                     Facilidad = value;
                 }

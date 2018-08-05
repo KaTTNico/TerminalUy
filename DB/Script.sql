@@ -356,7 +356,8 @@ AS BEGIN
 	--si existe terminal
 	if exists(select Codigo from Terminal where Codigo=@Codigo and Estado=1)
 	begin
-		update Facilidades set Facilidad=@Facilidad where Codigo=@Codigo
+		delete Facilidades where Codigo=@Codigo
+		insert into Facilidades values (@Codigo,@Facilidad)
 	end
 	
 	--de lo contrario
@@ -689,13 +690,13 @@ GO
 CREATE PROC BuscarViajeInternacional
 @NViaje int
 AS BEGIN
-	select * from ViajeInternacional join Viaje on ViajeInternacional.NViaje=Viaje.NViaje where ViajeInternacional.NViaje=@NViaje and Viaje.FPartida>CURRENT_TIMESTAMP
+	select Viaje.*,ViajeInternacional.ServicioABordo,ViajeInternacional.Documentacion from ViajeInternacional join Viaje on ViajeInternacional.NViaje=Viaje.NViaje where ViajeInternacional.NViaje=@NViaje and Viaje.FPartida>CURRENT_TIMESTAMP
 END
 GO
 
 CREATE PROC ListarViajesInternacionales
 AS BEGIN
-	select * from Viaje join ViajeInternacional on ViajeInternacional.NViaje=Viaje.NViaje where Viaje.FPartida>CURRENT_TIMESTAMP ;
+	select viaje.*,ViajeInternacional.ServicioABordo,ViajeInternacional.Documentacion from Viaje join ViajeInternacional on ViajeInternacional.NViaje=Viaje.NViaje where Viaje.FPartida>CURRENT_TIMESTAMP ;
 END
 GO
 -----------------------------------------------------SP VIAJES NACIONALES------------------------------------------------------------------------------------
@@ -910,14 +911,14 @@ GO
 CREATE PROC BuscarViajeNacional
 @NViaje int
 AS BEGIN
-	select * from ViajeNacional join Viaje on ViajeNacional.NViaje=Viaje.NViaje where ViajeNacional.NViaje=@NViaje and Viaje.FPartida>CURRENT_TIMESTAMP
+	select Viaje.*,ViajeNacional.CantParadas from ViajeNacional join Viaje on ViajeNacional.NViaje=Viaje.NViaje where ViajeNacional.NViaje=@NViaje and Viaje.FPartida>CURRENT_TIMESTAMP
 END
 GO
 
 --LISTAR TODOS LOS VIAJES NACIONALES
 CREATE PROC ListarViajesNacionales
 AS BEGIN
-	select * from Viaje join ViajeNacional on ViajeNacional.NViaje=Viaje.NViaje where Viaje.FPartida>CURRENT_TIMESTAMP ;
+    select Viaje.*,ViajeNacional.CantParadas from Viaje join ViajeNacional on ViajeNacional.NViaje=Viaje.NViaje where Viaje.FPartida>CURRENT_TIMESTAMP ;
 END
 GO
 
@@ -1335,11 +1336,11 @@ exec AltaFacilidad 'AYA','CAMBIO-MONEDA';
 GO
 
 -----------------------------------------------------INTERTS COMPANIA------------------------------------------------------------------------------------
-exec AltaCompania 'COETC','PT/SARANDI - ZABALA',095114540
+exec AltaCompania 'COETC','PT/SARANDI - ZABALA',26826495
 GO
 exec AltaCompania 'CUTCSA','25MAYO - ZABALA',26963107
 GO
-exec AltaCompania 'RAINCOP','R.I.P',099421610
+exec AltaCompania 'RAINCOP','R.I.P',26825647
 GO
 -----------------------------------------------------INTERTS VIAJES INTERNACIONALES------------------------------------------------------------------------------------
 --VIAJES INTER DE COETC

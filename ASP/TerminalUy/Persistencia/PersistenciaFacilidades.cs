@@ -14,12 +14,9 @@ namespace Persistencia
         //----------------------------------------------------------------------AM------------------------------------------------------------------------------------
 
         //ALTA FACILIDAD
-        public static void Altafacilidad(Terminal terminal) {
-            //conexion
-            SqlConnection conect = new SqlConnection(Conexion.Cnn);
-
+        public static void Altafacilidad(Terminal terminal,SqlTransaction transact) {
             //sp
-            SqlCommand sp = new SqlCommand("AltaFacilidad", conect);
+            SqlCommand sp = new SqlCommand("AltaFacilidad", transact.Connection);
             sp.CommandType = CommandType.StoredProcedure;
 
             //parametros
@@ -34,7 +31,7 @@ namespace Persistencia
 
             try
             {
-                conect.Open();
+                sp.Transaction = transact;
                 
                 foreach (Facilidades facilidad in terminal.pFacilidades) {
                         sp.Parameters.Add("@Facilidad", terminal.pFacilidades);
@@ -47,17 +44,12 @@ namespace Persistencia
 
             }
             catch { throw; }
-
-            finally { conect.Close(); }
         }
 
         //MODIFICAR FACILIDADES
-        public void ModificarFacilidades(Terminal terminal) {
-            //conexion
-            SqlConnection conect = new SqlConnection(Conexion.Cnn);
-
+        public void ModificarFacilidades(Terminal terminal,SqlTransaction transact) {
             //sp
-            SqlCommand sp = new SqlCommand("ModificarFacilidad", conect);
+            SqlCommand sp = new SqlCommand("ModificarFacilidad", transact.Connection);
             sp.CommandType = CommandType.StoredProcedure;
 
             //parametros
@@ -72,7 +64,7 @@ namespace Persistencia
 
             try
             {
-                conect.Open();
+                sp.Transaction = transact;
 
                 foreach (Facilidades facilidad in terminal.pFacilidades)
                 {
@@ -84,15 +76,13 @@ namespace Persistencia
 
             }
             catch { throw; }
-
-            finally { conect.Close(); }
         }
 
         //----------------------------------------------------------------------BUSQUEDA------------------------------------------------------------------------------------
 
 
         //BUSCAR FACILIDADES
-        public List<Facilidades> BuscarFacilidades(Terminal terminal)
+        public static List<Facilidades> BuscarFacilidades(Terminal terminal)
         {
             //conexion
             SqlConnection conect = new SqlConnection(Conexion.Cnn);

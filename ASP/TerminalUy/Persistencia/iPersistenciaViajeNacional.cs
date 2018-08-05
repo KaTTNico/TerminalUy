@@ -18,5 +18,11 @@ namespace Persistencia
 
         //MODIFICAR VIAJE NACIONAL
         void ModificarViajeNacional(ViajeNacional viajeNacional);
+
+        //LISTAR VIAJES NACIONALES
+        List<Viaje> ListarViajesNacionales();
+
+        //BUSCAR VIAJE NACIONAL
+        ViajeNacional BuscarViajeNacional(int NViaje);
     }
 }

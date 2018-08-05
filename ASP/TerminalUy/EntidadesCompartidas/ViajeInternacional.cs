@@ -24,7 +24,7 @@ namespace EntidadesCompartidas
             get { return Documentacion; }
             set { 
                 //verificar que la documentacion sea de hasta 100 caracteres
-                if ((Regex.Match(value,@"^(\w){2,100}$")).Success)
+                if ((Regex.Match(value, @"^([a-zA-Z-0-9]){2,100}$")).Success)
                 {
                     Documentacion = value;
                 }

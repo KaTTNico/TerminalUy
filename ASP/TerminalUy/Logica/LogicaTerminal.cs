@@ -25,7 +25,8 @@ namespace Logica
         {
             iPersistenciaTerminal fPersistencia = FabricaPersistencia.getPersistenciaTerminal();
 
-            try { fPersistencia.AltaTerminal(terminal); }
+            try { //fPersistencia.AltaTerminal(terminal); 
+            }
             catch { throw; }
         }
 
@@ -46,5 +47,7 @@ namespace Logica
             try { fPersistencia.ModificarTerminal(terminal); }
             catch { throw; }
         }
+
+        //buscar terminal
     }
 }

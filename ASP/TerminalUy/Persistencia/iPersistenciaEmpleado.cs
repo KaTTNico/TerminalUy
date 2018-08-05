@@ -20,6 +20,6 @@ namespace Persistencia
         void ModificarEmpleado(Empleado empleado);
 
         //BUSCAR EMPLEADO
-        Empleado BuscarEmpleado(int cedula );
+        Empleado BuscarEmpleado(int cedula);
     }
 }

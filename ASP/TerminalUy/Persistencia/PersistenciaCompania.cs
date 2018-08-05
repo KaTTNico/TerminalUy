@@ -131,7 +131,7 @@ namespace Persistencia
         }
 
         //BUSCAR COMPANIA
-        public Compania BusarCompania(string Nombre) {
+        public Compania BuscarCompania(string Nombre) {
             //conexion
             SqlConnection conect = new SqlConnection(Conexion.Cnn);
 

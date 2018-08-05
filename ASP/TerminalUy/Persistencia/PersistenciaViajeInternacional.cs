@@ -180,15 +180,45 @@ namespace Persistencia
 
                 if(reader.HasRows){
                     while(reader.Read()){
-                        ViajeInternacional viaje = new ViajeInternacional(Convert.ToInt32(reader[0]),((PersistenciaCompania.getInstance()).BusarCompania(reader[1].ToString())),((PersistenciaTerminal.getInstance()).BuscarTerminal(reader[2].ToString())),((PersistenciaEmpleado.getInstance().BuscarEmepleado(Convert.ToInt32(reader[3])))),Convert.ToDateTime(reader[4]),Convert.ToDateTime(reader[5]),Convert.ToInt32(reader[6]),Convert.ToBoolean(reader[7]),reader[8].ToString());
+                        ViajeInternacional viaje = new ViajeInternacional(Convert.ToInt32(reader[0]), ((PersistenciaCompania.getInstance()).BuscarCompania(reader[1].ToString())), ((PersistenciaTerminal.getInstance()).BuscarTerminal(reader[2].ToString())), ((PersistenciaEmpleado.getInstance().BuscarEmpleado(Convert.ToInt32(reader[3])))), Convert.ToDateTime(reader[4]), Convert.ToDateTime(reader[5]), Convert.ToInt32(reader[6]), Convert.ToBoolean(reader[7]), reader[8].ToString());
                         lista.Add(viaje); 
                     }
                 }
                 return lista;
             }
-            catch { throw; }
+            catch(Exception ex) { throw ex; }
 
             finally { conect.Close(); }
+        }
+
+        //BUSCAR VIAJE INTERNACIONAL
+        public ViajeInternacional BuscarViajeInternacional(int NViaje) {
+            //conexion
+            SqlConnection conect = new SqlConnection(Conexion.Cnn);
+
+            //sp
+            SqlCommand sp = new SqlCommand("BuscarViajeInternacional", conect);
+            sp.CommandType = CommandType.StoredProcedure;
+
+            //parametro
+            sp.Parameters.Add("@NViaje",NViaje);
+            //reader
+            SqlDataReader reader;
+
+            ViajeInternacional viaje = null;
+            try
+            {
+                conect.Open();
+                reader = sp.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    viaje = new ViajeInternacional(Convert.ToInt32(reader[0]), ((PersistenciaCompania.getInstance()).BuscarCompania(reader[1].ToString())), ((PersistenciaTerminal.getInstance()).BuscarTerminal(reader[2].ToString())), ((PersistenciaEmpleado.getInstance().BuscarEmpleado(Convert.ToInt32(reader[3])))), Convert.ToDateTime(reader[4]), Convert.ToDateTime(reader[5]), Convert.ToInt32(reader[6]), Convert.ToBoolean(reader[7]), reader[8].ToString());
+                }
+                return viaje;
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 }

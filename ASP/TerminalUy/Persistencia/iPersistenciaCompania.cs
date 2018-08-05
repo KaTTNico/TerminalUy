@@ -20,6 +20,6 @@ namespace Persistencia
         void ModificarCompania(Compania compania);
         
         //BUSCAR COMPANIA
-        public Compania BuscarCompania(string Nombre);
+        Compania BuscarCompania(string Nombre);
     }
 }

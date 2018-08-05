@@ -42,5 +42,13 @@ namespace Logica
             try{fPersistencia.ModificarCompania(compania);}
             catch { throw; }
         }
+
+        //buscar compania
+        public Compania BuscarCompania(string nombre)
+        {
+            iPersistenciaCompania fPersistencia = FabricaPersistencia.getPersistenciaCompania();
+            try { return fPersistencia.BuscarCompania(nombre); }
+            catch { throw; }
+        }
     }
 }

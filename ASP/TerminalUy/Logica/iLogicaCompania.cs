@@ -17,5 +17,8 @@ namespace Logica
 
         //MODIFICAR COMPANIA
         void ModificarCompania(Compania compania);
+
+        //BUSCAR COMPANIA
+        Compania BuscarCompania(string Nombre);
     }
 }

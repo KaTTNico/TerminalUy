@@ -135,13 +135,13 @@ namespace Persistencia
 
 
         //BUSCAR COMPANIA
-        public Empleado BuscarEmepleado(int cedula)
+        public Empleado BuscarEmpleado(int cedula)
         {
             //conexion
             SqlConnection conect = new SqlConnection(Conexion.Cnn);
 
             //sp
-            SqlCommand sp = new SqlCommand("ListarViajesInternacionales", conect);
+            SqlCommand sp = new SqlCommand("BuscarEmpleado", conect);
             sp.CommandType = CommandType.StoredProcedure;
 
             ///parametro

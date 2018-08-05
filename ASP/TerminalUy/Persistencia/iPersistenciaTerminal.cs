@@ -18,5 +18,8 @@ namespace Persistencia
 
         //MODIFICAR TERMINAL
         void ModificarTerminal(Terminal terminal);
+
+        //BUSCAR TERMINAL
+        Terminal BuscarTerminal(string codigo);
     }
 }
